@@ -1,0 +1,418 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Velo Silber Service — Mobiler Fahrradservice in Zürich</title>
+  <link rel="shortcut icon" href="/images/icon.ico" type="image/x-icon">
+
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+
+  <style>
+    /* --- Color & base --- */
+    :root{
+      --bg:#0A0A0A; /* carbon black */
+      --accent:#1C1C1C; /* dark gray */
+      --silver:#C0C0C0; /* silver */
+      --glass: rgba(255,255,255,0.03);
+      --ease: cubic-bezier(.22,.9,.12,1);
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family: 'Montserrat', 'Poppins', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+      background:var(--bg);
+      color:var(--silver);
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+      line-height:1.45;
+    }
+
+    a{color:inherit;text-decoration:none}
+
+    /* --- Utilities --- */
+    .container{max-width:1200px;margin:0 auto;padding:0 24px}
+    .flex{display:flex}
+    .center{display:flex;align-items:center;justify-content:center}
+    .stack{display:flex;flex-direction:column}
+
+    /* --- Header --- */
+    header{
+      position:sticky;top:0;z-index:40;background:var(--bg);backdrop-filter: blur(4px);
+      transition: box-shadow .28s var(--ease), transform .28s var(--ease);
+    }
+    header.scrolled{box-shadow:0 6px 18px rgba(0,0,0,0.6);}
+    .nav{height:72px;display:flex;align-items:center;justify-content:space-between}
+    .logo{font-weight:700;color:var(--silver);letter-spacing:0.6px}
+    nav ul{display:flex;gap:22px;align-items:center;padding:0;margin:0;list-style:none}
+    nav a{font-weight:500;opacity:.95}
+
+    /* Language toggle */
+    .lang-toggle{display:flex;align-items:center;gap:10px}
+    .lang-btn{border:1px solid rgba(192,192,192,0.06);padding:6px 10px;border-radius:999px;display:flex;gap:8px;align-items:center;cursor:pointer}
+    .lang-dot{width:14px;height:14px;border-radius:50%;background:var(--silver);transition:transform .25s var(--ease), background .25s var(--ease)}
+    .lang-btn:hover .lang-dot{transform:scale(1.08)}
+
+    /* Hamburger */
+    .hamburger{display:none;cursor:pointer;width:44px;height:44px;border-radius:8px;align-items:center;justify-content:center}
+    .hamburger span{display:block;width:20px;height:2px;background:var(--silver);margin:3px 0;transition:all .25s var(--ease)}
+
+    /* --- Hero --- */
+    .hero{
+      position:relative;min-height:78vh;display:flex;align-items:center;justify-content:center;overflow:hidden
+    }
+    .hero-bg{
+      position:absolute;inset:0;background-image: url('/images/bgg.jpg');
+      background-size:cover;background-position:center;transform:translateZ(0);
+      will-change:transform; transition: transform 0.6s var(--ease);
+    }
+    .hero-overlay{position:absolute;inset:0;background:linear-gradient(180deg, rgba(10,10,10,0.7), rgba(10,10,10,0.7));}
+    .hero-inner{position:relative;z-index:3;text-align:center;padding:80px 20px}
+    .kicker{font-size:14px;color:rgba(192,192,192,0.75);text-transform:uppercase;letter-spacing:1.8px;margin-bottom:10px}
+    h1{font-size:clamp(28px,6vw,52px);margin:0;font-weight:600}
+    p.lead{font-size:clamp(14px,2.2vw,18px);color:rgba(192,192,192,0.9);margin:14px 0 24px}
+
+    .cta{display:inline-block;padding:14px 28px;border-radius:999px;background:var(--silver);color:var(--bg);font-weight:600;cursor:pointer;transition:all .32s var(--ease);box-shadow:0 6px 18px rgba(0,0,0,0.45)}
+    .cta:hover{background:var(--bg);color:var(--silver);border:1px solid var(--silver);transform:translateY(-4px)}
+
+    /* --- About --- */
+    .section{padding:90px 0}
+    .about{display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:center}
+    .about img{width:100%;height:100%;object-fit:cover;border-radius:12px;box-shadow:0 12px 40px rgba(0,0,0,0.6)}
+    .about p{color:rgba(192,192,192,0.9)}
+
+    /* --- Services --- */
+    .cards{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+    .card{background:var(--accent);padding:22px;border-radius:12px;box-shadow:0 10px 30px rgba(0,0,0,0.6);min-height:140px;display:flex;flex-direction:column;gap:12px;transition:transform .28s var(--ease),box-shadow .28s var(--ease)}
+    .card:hover{transform:translateY(-8px);box-shadow:0 22px 50px rgba(0,0,0,0.7)}
+    .card .icon{width:44px;height:44px;border-radius:10px;display:grid;place-items:center;background:rgba(255,255,255,0.02)}
+
+    /* --- Pricing --- */
+    .pricing{display:grid;grid-template-columns:1fr 1fr;gap:24px}
+    .price-card{background:var(--bg);border:1px solid rgba(192,192,192,0.12);padding:26px;border-radius:12px;text-align:center;box-shadow:0 10px 30px rgba(0,0,0,0.55)}
+    .price-card h3{margin:6px 0 12px}
+    .price{font-size:22px;font-weight:700;color:var(--silver)}
+
+    /* --- Booking Form --- */
+    form{display:grid;gap:12px;grid-template-columns:repeat(2,1fr)}
+    input,textarea{background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.04);padding:12px;border-radius:8px;color:var(--silver);outline:none}
+    textarea{grid-column:1/-1;min-height:120px;resize:vertical}
+    .form-btn{grid-column:1/-1;justify-self:start;padding:12px 20px;border-radius:999px;border:none;cursor:pointer}
+
+    /* --- Footer --- */
+    footer{background:var(--accent);padding:28px 0;color:var(--silver)}
+    .socials{display:flex;gap:12px}
+    .socials a{display:inline-grid;place-items:center;width:40px;height:40px;border-radius:8px;background:transparent;border:1px solid rgba(192,192,192,0.04)}
+    .socials a:hover{transform:translateY(-4px);}
+
+    /* --- Animations (initial hidden states) --- */
+    .reveal{opacity:0;transform:translateY(18px);transition:all .7s var(--ease)}
+    .reveal.show{opacity:1;transform:none}
+    .reveal-left{opacity:0;transform:translateX(-20px);transition:all .7s var(--ease)}
+    .reveal-left.show{opacity:1;transform:none}
+    .reveal-right{opacity:0;transform:translateX(20px);transition:all .7s var(--ease)}
+    .reveal-right.show{opacity:1;transform:none}
+
+    /* --- Responsive --- */
+    @media (max-width:992px){
+      .cards{grid-template-columns:repeat(2,1fr)}
+      .about{grid-template-columns:1fr}
+      .pricing{grid-template-columns:1fr}
+      nav ul{display:none}
+      .hamburger{display:flex}
+    }
+    @media (max-width:640px){
+      .cards{grid-template-columns:1fr}
+      .hero{min-height:62vh}
+      header .nav{height:64px}
+      form{grid-template-columns:1fr}
+      .lang-toggle{display:none}
+    }
+
+    /* small niceties */
+    .muted{color:rgba(192,192,192,0.7);font-size:13px}
+  </style>
+</head>
+<body>
+
+  <header id="mainHeader">
+    <div class="container nav">
+      <div class="flex" style="gap:18px;align-items:center">
+        <div class="logo">Velo Silber Service</div>
+      </div>
+
+      <nav>
+        <ul>
+          <li><a href="#home" data-link>Home</a></li>
+          <li><a href="#services" data-link>Services</a></li>
+          <li><a href="#pricing" data-link>Pricing</a></li>
+          <li><a href="#booking" data-link>Booking</a></li>
+          <li><a href="#contact" data-link>Contact</a></li>
+        </ul>
+      </nav>
+
+      <div class="flex" style="gap:12px;align-items:center">
+        <div class="lang-toggle">
+          <div class="lang-btn" id="langBtn" aria-label="Language toggle">
+            <div class="lang-dot" id="langDot"></div>
+            <div style="font-size:13px;opacity:.9" id="langLabel">DE</div>
+          </div>
+        </div>
+
+        <div class="hamburger" id="menuToggle" aria-label="Open menu">
+          <span></span><span></span><span></span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Mobile nav panel -->
+    <div id="mobileNav" style="display:none;background:var(--bg);border-top:1px solid rgba(255,255,255,0.02);">
+      <div class="container stack" style="padding:18px">
+        <a href="#home" data-link class="muted" style="padding:10px 0">Home</a>
+        <a href="#services" data-link class="muted" style="padding:10px 0">Services</a>
+        <a href="#pricing" data-link class="muted" style="padding:10px 0">Pricing</a>
+        <a href="#booking" data-link class="muted" style="padding:10px 0">Booking</a>
+        <a href="#contact" data-link class="muted" style="padding:10px 0">Contact</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- HERO -->
+  <section id="home" class="hero">
+    <div class="hero-bg" id="heroBg"></div>
+    <div class="hero-overlay"></div>
+    <div class="hero-inner container">
+      <div class="reveal" style="transition-delay:.2s">
+        <div class="kicker">Premium | Mobile | Zürich</div>
+        <h1 class="reveal reveal-top" data-i18n-de="Mobiler Fahrradservice in Zürich" data-i18n-en="Mobile Bike Service in Zürich">Mobiler Fahrradservice in Zürich</h1>
+        <p class="lead" data-i18n-de="Professioneller Service direkt zu Ihnen nach Hause" data-i18n-en="Professional service delivered to your home">Professioneller Service direkt zu Ihnen nach Hause</p>
+        <button class="cta" id="ctaHero" data-i18n-de="Jetzt Termin buchen" data-i18n-en="Book Now">Jetzt Termin buchen</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section class="section" id="about">
+    <div class="container about">
+      <div class="reveal-left">
+        <h2 data-i18n-de="Über mich" data-i18n-en="About">Über mich</h2>
+        <p data-i18n-de="Praktikum bei <span style='color:#B38F5A'>Züri Rollt</span> als Fahrradmechaniker – ich bringe frisches Know-how in jeden Service." data-i18n-en="Internship at Züri Rollt as bike mechanic – bringing fresh expertise to every service.">Praktikum bei Züri Rollt als Fahrradmechaniker – ich bringe frisches Know-how in jeden Service.</p>
+      </div>
+      <div class="reveal-right">
+        <img src="/images/mechanical working on a bike.jpg" alt="Mechanic working on bike">
+      </div>
+    </div>
+  </section>
+
+  <!-- SERVICES -->
+  <section class="section" id="services">
+    <div class="container">
+      <div class="reveal">
+        <h2 data-i18n-de="Unsere Services" data-i18n-en="Services">Unsere Services</h2>
+        <p class="muted" data-i18n-de="Elegante, schnelle Services — gebracht zu Ihnen" data-i18n-en="Elegant, fast services — delivered to you">Elegante, schnelle Services — gebracht zu Ihnen</p>
+      </div>
+
+      <div class="cards" style="margin-top:28px">
+        <div class="card reveal">
+          <div class="flex" style="justify-content:space-between;align-items:center">
+            <div class="icon">🔧</div>
+            <div style="font-weight:600">Velo Silber Service</div>
+          </div>
+          <div style="flex:1"></div>
+          <div data-i18n-de="Kompletter Check & Pflege Ihres Fahrrads in ca. 30–40 Minuten." data-i18n-en="Complete bike check & maintenance in approx. 30–40 minutes.">Kompletter Check & Pflege Ihres Fahrrads in ca. 30–40 Minuten.</div>
+        </div>
+
+        <div class="card reveal">
+          <div class="flex" style="justify-content:space-between;align-items:center">
+            <div class="icon">⚙️</div>
+            <div style="font-weight:600" data-i18n-de="Bremsen & Schaltung" data-i18n-en="Brakes & Gears">Bremsen & Schaltung</div>
+          </div>
+          <div style="flex:1"></div>
+          <div class="muted" data-i18n-de="Feinabstimmung von Bremsen und Schaltung für optimale Kontrolle." data-i18n-en="Fine-tuning brakes and gears for optimal control.">Feinabstimmung von Bremsen und Schaltung für optimale Kontrolle.</div>
+        </div>
+
+        <div class="card reveal">
+          <div class="flex" style="justify-content:space-between;align-items:center">
+            <div class="icon">🧽</div>
+            <div style="font-weight:600" data-i18n-de="Reinigung & Pflege" data-i18n-en="Cleaning & Care">Reinigung & Pflege</div>
+          </div>
+          <div style="flex:1"></div>
+          <div class="muted" data-i18n-de="Sorgfältige Reinigung, Schmierung und Korrosionsschutz." data-i18n-en="Thorough cleaning, lubrication and corrosion protection.">Sorgfältige Reinigung, Schmierung und Korrosionsschutz.</div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- PRICING -->
+  <section class="section" id="pricing">
+    <div class="container">
+      <div class="reveal">
+        <h2 data-i18n-de="Preise" data-i18n-en="Pricing">Preise</h2>
+        <p class="muted" data-i18n-de="Faire, transparente Preise — keine Überraschungen" data-i18n-en="Fair, transparent pricing — no surprises">Faire, transparente Preise — keine Überraschungen</p>
+      </div>
+
+      <div class="pricing" style="margin-top:28px">
+        <div class="price-card reveal">
+          <h3 data-i18n-de="Introductory" data-i18n-en="Introductory">Introductory</h3>
+          <div class="price">CHF 35–40</div>
+          <p class="muted" data-i18n-de="Schneller Check & Basis-Pflege" data-i18n-en="Quick check & basic care">Schneller Check & Basis-Pflege</p>
+        </div>
+
+        <div class="price-card reveal">
+          <h3 data-i18n-de="Standard" data-i18n-en="Standard">Standard</h3>
+          <div class="price">CHF 45–50</div>
+          <p class="muted" data-i18n-de="Umfassende Wartung inkl. kleiner Einstellungen" data-i18n-en="Comprehensive maintenance incl. minor adjustments">Umfassende Wartung inkl. kleiner Einstellungen</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- BOOKING / CONTACT -->
+  <section class="section" id="team">
+    <div class="container">
+      <div class="reveal">
+        <h2>Team</h2>
+        <div class="card" style="max-width:280px;margin-top:18px;text-align:center">
+          <img src="/images/member.jpg" alt="Iyed" style="width:120px;height:120px;border-radius:50%;object-fit:cover;margin:auto;box-shadow:0 6px 18px rgba(0,0,0,0.6)">
+          <h3 style="margin:12px 0 6px">Iyed</h3>
+          <p class="muted">DE (A2-B1) · EN · AR</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="booking">
+    <div class="container center">
+      <a class="cta" href="https://wa.me/+41772320307" target="_blank" style="display:flex;align-items:center;gap:10px">📱 WhatsApp</a>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section class="section" id="contact" style="padding-top:40px;padding-bottom:40px">
+    <div class="container">
+      <div class="reveal">
+        <h3 data-i18n-de="Kontakt" data-i18n-en="Contact">Kontakt</h3>
+        <p class="muted">Velo Silber Service — Zürich · +41 77 232 03 07 · <a href="mailto: info.velosilber@gmail.com"> info.velosilber@gmail.com</a></p>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="container" style="display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap">
+      <div class="muted">© <span id="year"></span> Velo Silber Service — Zürich</div>
+      <div class="socials">
+        <a href="#" aria-label="Instagram">IG</a>
+        <a href="#" aria-label="Facebook">FB</a>
+      </div>
+      <div class="muted">DE / EN</div>
+    </div>
+  </footer>
+
+
+<script>
+  // ---- Language switch ----
+  const langBtn = document.getElementById('langBtn');
+  const langDot = document.getElementById('langDot');
+  const langLabel = document.getElementById('langLabel');
+  let lang = localStorage.getItem('vs-lang') || 'DE';
+
+  function applyLang(){
+    document.documentElement.lang = (lang==='DE')? 'de' : 'en';
+    langLabel.textContent = lang;
+    if(lang==='EN'){
+      langDot.style.background = 'transparent';
+      langDot.style.border = '1px solid rgba(192,192,192,0.9)';
+      // swap visible text elements
+    } else {
+      langDot.style.background = 'var(--silver)';
+      langDot.style.border = 'none';
+    }
+
+    document.querySelectorAll('[data-i18n-de]').forEach(el=>{
+      const de = el.getAttribute('data-i18n-de');
+      const en = el.getAttribute('data-i18n-en')||de;
+      el.innerHTML = (lang==='DE')? de : en;
+    });
+  }
+  langBtn.addEventListener('click', ()=>{
+    lang = (lang==='DE')? 'EN' : 'DE';
+    localStorage.setItem('vs-lang', lang);
+    applyLang();
+  });
+  applyLang();
+
+  // ---- Smooth scroll for anchors ----
+  // Smooth scroll for CTA button
+  const ctaHero = document.getElementById('ctaHero');
+  if(ctaHero){ctaHero.addEventListener('click', ()=>{
+    const target = document.querySelector('#booking');
+    if(target) target.scrollIntoView({behavior:'smooth',block:'start'});
+  })}
+
+  document.querySelectorAll('[data-link]').forEach(a=>{
+    a.addEventListener('click', (e)=>{
+      e.preventDefault();
+      const href = a.getAttribute('href');
+      const target = document.querySelector(href);
+      if(target){
+        target.scrollIntoView({behavior:'smooth',block:'start'});
+        // close mobile nav if open
+        closeMobileNav();
+      }
+    })
+  });
+
+  // ---- Mobile menu ----
+  const menuToggle = document.getElementById('menuToggle');
+  const mobileNav = document.getElementById('mobileNav');
+  let open = false;
+  menuToggle.addEventListener('click', ()=>{
+    open = !open;
+    mobileNav.style.display = open ? 'block':'none';
+  });
+  function closeMobileNav(){open=false;mobileNav.style.display='none'}
+
+  // ---- Header shadow on scroll ----
+  const header = document.getElementById('mainHeader');
+  window.addEventListener('scroll', ()=>{
+    if(window.scrollY>16) header.classList.add('scrolled'); else header.classList.remove('scrolled');
+    // hero parallax
+    const heroBg = document.getElementById('heroBg');
+    const offset = window.scrollY * 0.15;
+    if(heroBg) heroBg.style.transform = `translateY(${offset}px) scale(1.03)`;
+  });
+
+  // ---- Reveal on scroll (IntersectionObserver) ----
+  const reveals = document.querySelectorAll('.reveal, .reveal-left, .reveal-right');
+  const obs = new IntersectionObserver((entries)=>{
+    entries.forEach(entry=>{
+      if(entry.isIntersecting){
+        entry.target.classList.add('show');
+        obs.unobserve(entry.target);
+      }
+    })
+  },{threshold:0.12});
+  reveals.forEach(r=>obs.observe(r));
+
+  // ---- Booking form stub (no backend) ----
+  document.getElementById('bookingForm').addEventListener('submit', (e)=>{
+    e.preventDefault();
+    const btn = e.target.querySelector('button');
+    btn.textContent = (localStorage.getItem('vs-lang')==='EN')? 'Booked' : 'Gebucht';
+    btn.disabled = true;
+    btn.style.opacity = .9;
+    // Here, integrate with your backend or email service (e.g. Formspree, Netlify Forms)
+    setTimeout(()=>{
+      alert((localStorage.getItem('vs-lang')==='EN')? 'Thank you — your booking request was sent.' : 'Danke — Ihre Buchungsanfrage wurde gesendet.');
+    },350);
+  });
+
+  // small misc
+  document.getElementById('year').textContent = new Date().getFullYear();
+
+</script>
+</body>
+</html>
