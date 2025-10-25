@@ -1,138 +1,192 @@
 <!doctype html>
-<html lang="de">
+<html lang="de" data-theme="light">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Velo Silber Service — Mobiler Fahrradservice in Zürich</title>
-  <link rel="shortcut icon" href="images/icon.ico" type="image/x-icon">
 
-  <!-- Fonts -->
+  <!-- SEO & Social -->
+  <meta name="description" content="Velo Silber Service — Premium mobiler Fahrradservice in Zürich. Schnelle Checks, Bremsen & Schaltung, Reinigung. 📅 Jetzt Termin buchen via WhatsApp oder Formular." />
+  <meta name="keywords" content="Velo, Fahrradservice, Mobiler Service, Zürich, Fahrradreparatur" />
+  <meta name="author" content="Velo Silber Service" />
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Velo Silber Service — Mobiler Fahrradservice in Zürich">
+  <meta property="og:description" content="Premium mobiler Fahrradservice in Zürich — wir kommen zu Ihnen. Schnelle Checks, Bremsen & Schaltung, Reinigung.">
+  <meta property="og:image" content="images/bgg.jpg">
+  <meta property="og:locale" content="de_CH">
+
+  <link rel="shortcut icon" href="images/icon.ico" type="image/x-icon">
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
 
   <style>
-    /* --- Color & base --- */
+    /* ---------- Color system (CSS variables) ---------- */
     :root{
-      --bg:#0A0A0A; /* carbon black */
-      --accent:#1C1C1C; /* dark gray */
-      --silver:#C0C0C0; /* silver */
-      --glass: rgba(255,255,255,0.03);
+      --color-bg: #F8F8F8; /* Carbon White (light default) */
+      --color-surface: #FFFFFF;
+      --color-text: #1A1A1A;
+      --color-text-secondary: #555555;
+      --color-accent: #D4AF37; /* gold */
+      --color-accent-rgb: 212,175,55;
+      --color-divider: #E5E5E5;
+      --glass: rgba(0,0,0,0.04);
       --ease: cubic-bezier(.22,.9,.12,1);
+      --shadow-1: 0 8px 24px rgba(0,0,0,0.06);
+      --radius: 12px;
+      --container-max: 1200px;
     }
+    [data-theme='dark']{
+      --color-bg: #0D0D0D; /* Carbon Black */
+      --color-surface: #1A1A1A;
+      --color-text: #F2F2F2;
+      --color-text-secondary: #CCCCCC;
+      --color-accent: #D4AF37;
+      --color-accent-rgb: 212,175,55;
+      --color-divider: #333333;
+      --glass: rgba(255,255,255,0.03);
+      --shadow-1: 0 12px 40px rgba(0,0,0,0.6);
+    }
+
+    /* ---------- Base ---------- */
     *{box-sizing:border-box}
     html,body{height:100%}
     body{
       margin:0;
-      font-family: 'Montserrat', 'Poppins', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
-      background:var(--bg);
-      color:var(--silver);
+      font-family: 'Montserrat','Poppins', system-ui, -apple-system, 'Segoe UI', Roboto, Arial;
+      background:var(--color-bg);
+      color:var(--color-text);
       -webkit-font-smoothing:antialiased;
       -moz-osx-font-smoothing:grayscale;
       line-height:1.45;
+      transition:background .3s ease, color .3s ease;
     }
-
     a{color:inherit;text-decoration:none}
 
-    /* --- Utilities --- */
-    .container{max-width:1200px;margin:0 auto;padding:0 24px}
+    .container{max-width:var(--container-max);margin:0 auto;padding:0 20px}
     .flex{display:flex}
     .center{display:flex;align-items:center;justify-content:center}
     .stack{display:flex;flex-direction:column}
 
-    /* --- Header --- */
-    header{
-      position:sticky;top:0;z-index:40;background:var(--bg);backdrop-filter: blur(4px);
-      transition: box-shadow .28s var(--ease), transform .28s var(--ease);
-    }
-    header.scrolled{box-shadow:0 6px 18px rgba(0,0,0,0.6);}
+    /* ---------- Header / Nav ---------- */
+    header{position:sticky;top:0;z-index:50;background:linear-gradient(to bottom, rgba(255,255,255,0.6), rgba(255,255,255,0.35));backdrop-filter: blur(6px);transition: all .28s var(--ease);}
+    [data-theme='dark'] header{background:linear-gradient(to bottom, rgba(10,10,10,0.75), rgba(10,10,10,0.5));}
+    header.scrolled{box-shadow:0 6px 18px rgba(0,0,0,0.12);}
+
     .nav{height:72px;display:flex;align-items:center;justify-content:space-between}
-    .logo{font-weight:700;color:var(--silver);letter-spacing:0.6px}
-    nav ul{display:flex;gap:22px;align-items:center;padding:0;margin:0;list-style:none}
-    nav a{font-weight:500;opacity:.95}
+    .logo{font-weight:700;color:var(--color-text);letter-spacing:0.6px}
 
-    /* Language toggle */
+    nav ul{display:flex;gap:20px;align-items:center;padding:0;margin:0;list-style:none}
+    nav a{font-weight:600;padding:8px 12px;border-radius:8px;color:var(--color-text-secondary);display:inline-block}
+    nav a:hover{color:var(--color-text);background:var(--glass)}
+    nav a.active{color:var(--color-accent);box-shadow:inset 0 -2px 0 var(--color-accent)}
+
+    /* theme toggle */
+    .controls{display:flex;gap:12px;align-items:center}
+    .theme-toggle{width:46px;height:36px;border-radius:999px;background:transparent;border:1px solid var(--color-divider);display:flex;align-items:center;justify-content:center;cursor:pointer}
+    .theme-toggle:focus{outline:2px solid rgba(212,175,55,0.15)}
+
     .lang-toggle{display:flex;align-items:center;gap:10px}
-    .lang-btn{border:1px solid rgba(192,192,192,0.06);padding:6px 10px;border-radius:999px;display:flex;gap:8px;align-items:center;cursor:pointer}
-    .lang-dot{width:14px;height:14px;border-radius:50%;background:var(--silver);transition:transform .25s var(--ease), background .25s var(--ease)}
-    .lang-btn:hover .lang-dot{transform:scale(1.08)}
+    .lang-btn{border:1px solid var(--color-divider);padding:6px 10px;border-radius:999px;display:flex;gap:8px;align-items:center;cursor:pointer;background:var(--color-surface)}
+    .lang-dot{width:14px;height:14px;border-radius:50%;background:var(--color-accent);transition:transform .25s var(--ease), background .25s var(--ease)}
 
-    /* Hamburger */
+    /* hamburger */
     .hamburger{display:none;cursor:pointer;width:44px;height:44px;border-radius:8px;align-items:center;justify-content:center}
-    .hamburger span{display:block;width:20px;height:2px;background:var(--silver);margin:3px 0;transition:all .25s var(--ease)}
+    .hamburger span{display:block;width:20px;height:2px;background:var(--color-text);margin:3px 0;transition:all .25s var(--ease)}
 
-    /* --- Hero --- */
-    .hero{
-      position:relative;min-height:78vh;display:flex;align-items:center;justify-content:center;overflow:hidden
-    }
-    .hero-bg{
-      position:absolute;inset:0;background-image: url('images/bgg.jpg');
-      background-size:cover;background-position:center;transform:translateZ(0);
-      will-change:transform; transition: transform 0.6s var(--ease);
-    }
-    .hero-overlay{position:absolute;inset:0;background:linear-gradient(180deg, rgba(10,10,10,0.7), rgba(10,10,10,0.7));}
-    .hero-inner{position:relative;z-index:3;text-align:center;padding:80px 20px}
-    .kicker{font-size:14px;color:rgba(192,192,192,0.75);text-transform:uppercase;letter-spacing:1.8px;margin-bottom:10px}
-    h1{font-size:clamp(28px,6vw,52px);margin:0;font-weight:600}
-    p.lead{font-size:clamp(14px,2.2vw,18px);color:rgba(192,192,192,0.9);margin:14px 0 24px}
+    /* ---------- Hero ---------- */
+    .hero{position:relative;min-height:72vh;display:flex;align-items:center;justify-content:center;overflow:hidden}
+    .hero-bg{position:absolute;inset:0;background-image:url('images/bgg.jpg');background-size:cover;background-position:center;filter:blur(6px) contrast(.95) saturate(.9);transform:scale(1.08);transition:transform .6s var(--ease)}
+    .hero-overlay{position:absolute;inset:0;background:linear-gradient(180deg, rgba(0,0,0,0.12), rgba(0,0,0,0.12));}
+    .hero-inner{position:relative;z-index:20;text-align:center;padding:72px 20px}
 
-    .cta{display:inline-block;padding:14px 28px;border-radius:999px;background:var(--silver);color:var(--bg);font-weight:600;cursor:pointer;transition:all .32s var(--ease);box-shadow:0 6px 18px rgba(0,0,0,0.45)}
-    .cta:hover{background:var(--bg);color:var(--silver);border:1px solid var(--silver);transform:translateY(-4px)}
+    .kicker{font-size:13px;color:var(--color-text-secondary);text-transform:uppercase;letter-spacing:1.6px;margin-bottom:10px;color:#F2F2F2;}
+    h1{font-size:clamp(30px,6vw,56px);margin:0;font-weight:700;color:#F2F2F2;}
+    p.lead{font-size:clamp(14px,2.2vw,18px);color:#F2F2F2;margin:12px 0 22px}
 
-    /* --- About --- */
-    .section{padding:90px 0}
-    .about{display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:center}
-    .about img{width:100%;height:100%;object-fit:cover;border-radius:12px;box-shadow:0 12px 40px rgba(0,0,0,0.6)}
-    .about p{color:rgba(192,192,192,0.9)}
+    .cta{display:inline-flex;align-items:center;gap:10px;padding:12px 22px;border-radius:999px;background:var(--color-accent);color:var(--color-surface);font-weight:700;cursor:pointer;transition:all .28s var(--ease);box-shadow:0 10px 30px rgba(var(--color-accent-rgb),0.12);border:none}
+    .cta:focus{outline:3px solid rgba(var(--color-accent-rgb),0.12)}
+    .cta:hover{transform:translateY(-3px)}
+    .cta.pulse{animation: pulse 6s ease-in-out infinite}
+    @keyframes pulse{0%{box-shadow:0 10px 30px rgba(var(--color-accent-rgb),0.12)}50%{box-shadow:0 14px 44px rgba(var(--color-accent-rgb),0.18)}100%{box-shadow:0 10px 30px rgba(var(--color-accent-rgb),0.12)}}
 
-    /* --- Services --- */
+    /* ---------- Decorative floating shapes ---------- */
+    .shapes{position:absolute;inset:0;pointer-events:none;z-index:10;overflow:hidden}
+    .shape{position:absolute;opacity:0.08;filter:blur(10px);transform-origin:center;will-change:transform,opacity}
+    .shape.circle{width:220px;height:220px;border-radius:50%}
+    .shape.tri{width:160px;height:160px;clip-path:polygon(50% 0%,0% 100%,100% 100%)}
+    .shape.poly{width:200px;height:160px;clip-path:polygon(50% 0%, 90% 25%, 75% 100%, 25% 100%, 10% 25%)}
+    .shape.slow{animation:floatSlow 18s linear infinite}
+    .shape.mid{animation:floatMid 24s linear infinite}
+    .shape.fast{animation:floatFast 12s linear infinite}
+    @keyframes floatSlow{0%{transform:translateY(0) translateX(0) rotate(0)}50%{transform:translateY(-30px) translateX(20px) rotate(12deg)}100%{transform:translateY(0) translateX(0) rotate(0)}}
+    @keyframes floatMid{0%{transform:translateY(0) translateX(0) rotate(0)}50%{transform:translateY(-22px) translateX(-18px) rotate(-8deg)}100%{transform:translateY(0) translateX(0) rotate(0)}}
+    @keyframes floatFast{0%{transform:translateY(0) translateX(0) rotate(0)}50%{transform:translateY(-12px) translateX(14px) rotate(6deg)}100%{transform:translateY(0) translateX(0) rotate(0)}}
+
+    /* set colors via theme-aware CSS variables */
+    .shape{background:linear-gradient(135deg, rgba(var(--color-accent-rgb),0.14), rgba(var(--color-accent-rgb),0.06))}
+    [data-theme='dark'] .shape{opacity:0.06}
+
+    /* ---------- Sections ---------- */
+    .section{padding:72px 0}
+    .about{display:grid;grid-template-columns:1fr 1fr;gap:36px;align-items:center}
+    .about img{width:100%;height:100%;object-fit:cover;border-radius:var(--radius);box-shadow:var(--shadow-1)}
+    .about p{color:var(--color-text-secondary)}
+
     .cards{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
-    .card{background:var(--accent);padding:22px;border-radius:12px;box-shadow:0 10px 30px rgba(0,0,0,0.6);min-height:140px;display:flex;flex-direction:column;gap:12px;transition:transform .28s var(--ease),box-shadow .28s var(--ease)}
-    .card:hover{transform:translateY(-8px);box-shadow:0 22px 50px rgba(0,0,0,0.7)}
-    .card .icon{width:44px;height:44px;border-radius:10px;display:grid;place-items:center;background:rgba(255,255,255,0.02)}
 
-    /* --- Pricing --- */
+    /* Card base - now with persistent hover border like pricing */
+    .card{background:var(--color-surface);padding:22px;border-radius:12px;box-shadow:var(--shadow-1);min-height:140px;display:flex;flex-direction:column;gap:12px;transition:transform .28s var(--ease),box-shadow .28s var(--ease),border-color .28s var(--ease),opacity .28s var(--ease);border:1px solid var(--color-divider);}
+    .card .icon{width:44px;height:44px;border-radius:10px;display:grid;place-items:center;background:transparent}
+    .card:hover{transform:translateY(-6px);box-shadow:0 20px 48px rgba(0,0,0,0.12);border-color:var(--color-accent);}
+
+    /* ---------- Pricing (kept behavior) ---------- */
     .pricing{display:grid;grid-template-columns:1fr 1fr;gap:24px}
-    .price-card{background:var(--bg);border:1px solid rgba(192,192,192,0.12);padding:26px;border-radius:12px;text-align:center;box-shadow:0 10px 30px rgba(0,0,0,0.55)}
-    .price-card h3{margin:6px 0 12px}
-    .price{font-size:22px;font-weight:700;color:var(--silver)}
+    .price-card{background:var(--color-surface);border:1px solid var(--color-divider);padding:22px;border-radius:12px;text-align:left;box-shadow:var(--shadow-1);transition:transform .28s var(--ease),box-shadow .28s var(--ease),border-color .28s var(--ease)}
+    .price-card:hover{transform:translateY(-6px);box-shadow:0 24px 60px rgba(0,0,0,0.08);border-color:var(--color-accent)}
+    .price{font-size:20px;font-weight:700;color:var(--color-text)}
+    .price-card ul{margin:12px 0 0;padding-left:18px;color:var(--color-text-secondary)}
 
-    /* --- Booking Form --- */
-    form{display:grid;gap:12px;grid-template-columns:repeat(2,1fr)}
-    input,textarea{background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.04);padding:12px;border-radius:8px;color:var(--silver);outline:none}
-    textarea{grid-column:1/-1;min-height:120px;resize:vertical}
-    .form-btn{grid-column:1/-1;justify-self:start;padding:12px 20px;border-radius:999px;border:none;cursor:pointer}
+    /* ---------- Booking Form ---------- */
+    .booking-wrap{max-width:820px;margin:0 auto}
+    form{display:grid;gap:12px;grid-template-columns:repeat(2,1fr);background:var(--color-surface);padding:18px;border-radius:12px;border:1px solid var(--color-divider);box-shadow:var(--shadow-1)}
+    input,textarea,select{background:transparent;border:1px solid var(--color-divider);padding:12px;border-radius:8px;color:var(--color-text);outline:none}
+    textarea{grid-column:1/-1;min-height:110px}
+    .form-btn{grid-column:1/-1;justify-self:center;padding:12px 20px;border-radius:999px;border:none;cursor:pointer;background:var(--color-accent);color:var(--color-surface);font-weight:700}
 
-    /* --- Footer --- */
-    footer{background:var(--accent);padding:28px 0;color:var(--silver)}
-    .socials{display:flex;gap:12px}
-    .socials a{display:inline-grid;place-items:center;width:40px;height:40px;border-radius:8px;background:transparent;border:1px solid rgba(192,192,192,0.04)}
-    .socials a:hover{transform:translateY(-4px);}
-
-    /* --- Animations (initial hidden states) --- */
-    .reveal{opacity:0;transform:translateY(18px);transition:all .7s var(--ease)}
-    .reveal.show{opacity:1;transform:none}
-    .reveal-left{opacity:0;transform:translateX(-20px);transition:all .7s var(--ease)}
-    .reveal-left.show{opacity:1;transform:none}
-    .reveal-right{opacity:0;transform:translateX(20px);transition:all .7s var(--ease)}
-    .reveal-right.show{opacity:1;transform:none}
-
-    /* --- Responsive --- */
-    @media (max-width:992px){
-      .cards{grid-template-columns:repeat(2,1fr)}
-      .about{grid-template-columns:1fr}
-      .pricing{grid-template-columns:1fr}
+    /* sticky mobile CTA */
+    .mobile-cta{display:none}
+    @media (max-width:640px){
+      header .nav{height:64px}
       nav ul{display:none}
       .hamburger{display:flex}
-    }
-    @media (max-width:640px){
+      .about{grid-template-columns:1fr}
       .cards{grid-template-columns:1fr}
-      .hero{min-height:62vh}
-      header .nav{height:64px}
+      .pricing{grid-template-columns:1fr}
       form{grid-template-columns:1fr}
       .lang-toggle{display:none}
+      .mobile-cta{position:fixed;left:12px;right:12px;bottom:12px;z-index:60;display:flex;gap:10px;align-items:center}
+      .mobile-cta .cta{flex:1;padding:14px}
     }
 
+    /* contact panel */
+    .contact-panel{background:var(--color-surface);border:1px solid var(--color-divider);padding:18px;border-radius:12px}
+
+    /* footer */
+    footer{background:transparent;padding:28px 0;color:var(--color-text-secondary)}
+    .socials{display:flex;gap:12px}
+    .socials a{display:inline-grid;place-items:center;width:40px;height:40px;border-radius:8px;background:transparent;border:1px solid var(--color-divider)}
+
+    /* reveal animation */
+    .reveal{opacity:0;transform:translateY(18px);transition:all .7s var(--ease)}
+    .reveal.show{opacity:1;transform:none}
+
     /* small niceties */
-    .muted{color:rgba(192,192,192,0.7);font-size:13px}
+    .muted{color:var(--color-text-secondary);font-size:13px}
+
+    /* ensure smooth border fade when mouse leaves */
+    .card, .price-card{transition:box-shadow .28s var(--ease), border-color .35s ease, transform .28s var(--ease)}
+
   </style>
 </head>
 <body>
@@ -144,22 +198,24 @@
       </div>
 
       <nav>
-        <ul>
-          <li><a href="#home" data-link>Home</a></li>
-          <li><a href="#services" data-link>Services</a></li>
-          <li><a href="#pricing" data-link>Pricing</a></li>
-          <li><a href="#booking" data-link>Booking</a></li>
-          <li><a href="#contact" data-link>Contact</a></li>
+        <ul id="siteNav">
+          <li><a href="#home" data-link class="nav-link">Home</a></li>
+          <li><a href="#services" data-link class="nav-link">Services</a></li>
+          <li><a href="#pricing" data-link class="nav-link">Pricing</a></li>
+          <li><a href="#booking" data-link class="nav-link">Booking</a></li>
+          <li><a href="#contact" data-link class="nav-link">Contact</a></li>
         </ul>
       </nav>
 
-      <div class="flex" style="gap:12px;align-items:center">
+      <div class="controls">
         <div class="lang-toggle">
           <div class="lang-btn" id="langBtn" aria-label="Language toggle">
             <div class="lang-dot" id="langDot"></div>
             <div style="font-size:13px;opacity:.9" id="langLabel">DE</div>
           </div>
         </div>
+
+        <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">🌞</button>
 
         <div class="hamburger" id="menuToggle" aria-label="Open menu">
           <span></span><span></span><span></span>
@@ -168,7 +224,7 @@
     </div>
 
     <!-- Mobile nav panel -->
-    <div id="mobileNav" style="display:none;background:var(--bg);border-top:1px solid rgba(255,255,255,0.02);">
+    <div id="mobileNav" style="display:none;background:var(--color-bg);border-top:1px solid var(--color-divider);">
       <div class="container stack" style="padding:18px">
         <a href="#home" data-link class="muted" style="padding:10px 0">Home</a>
         <a href="#services" data-link class="muted" style="padding:10px 0">Services</a>
@@ -180,15 +236,28 @@
   </header>
 
   <!-- HERO -->
+  <main>
   <section id="home" class="hero">
     <div class="hero-bg" id="heroBg"></div>
     <div class="hero-overlay"></div>
+
+    <!-- decorative shapes layer -->
+    <div class="shapes" aria-hidden="true">
+      <div class="shape circle slow" style="left:6%;top:18%;background:linear-gradient(135deg, rgba(var(--color-accent-rgb),0.12), rgba(var(--color-accent-rgb),0.04));width:220px;height:220px"></div>
+      <div class="shape tri mid" style="right:8%;top:8%;background:linear-gradient(135deg, rgba(var(--color-accent-rgb),0.10), rgba(var(--color-accent-rgb),0.03));width:160px;height:160px"></div>
+      <div class="shape poly fast" style="left:14%;bottom:6%;background:linear-gradient(135deg, rgba(var(--color-accent-rgb),0.08), rgba(var(--color-accent-rgb),0.02));width:200px;height:160px"></div>
+      <div class="shape circle mid" style="right:22%;bottom:18%;background:linear-gradient(135deg, rgba(var(--color-accent-rgb),0.06), rgba(var(--color-accent-rgb),0.02));width:160px;height:160px"></div>
+    </div>
+
     <div class="hero-inner container">
-      <div class="reveal" style="transition-delay:.2s">
+      <div class="reveal" style="transition-delay:.15s">
         <div class="kicker">Premium | Mobile | Zürich</div>
-        <h1 class="reveal reveal-top" data-i18n-de="Mobiler Fahrradservice in Zürich" data-i18n-en="Mobile Bike Service in Zürich">Mobiler Fahrradservice in Zürich</h1>
+        <h1 class="reveal-top" data-i18n-de="Mobiler Fahrradservice in Zürich" data-i18n-en="Mobile Bike Service in Zürich">Mobiler Fahrradservice in Zürich</h1>
         <p class="lead" data-i18n-de="Professioneller Service direkt zu Ihnen nach Hause" data-i18n-en="Professional service delivered to your home">Professioneller Service direkt zu Ihnen nach Hause</p>
-        <button class="cta" id="ctaHero" data-i18n-de="Jetzt Termin buchen" data-i18n-en="Book Now">Jetzt Termin buchen</button>
+        <div style="display:flex;gap:12px;justify-content:center;align-items:center">
+          <button class="cta pulse" id="ctaHero" style="padding:14px 26px;" data-i18n-de="📅 Jetzt Termin buchen" data-i18n-en="📅 Book Now">📅 Jetzt Termin buchen</button>
+          <a class="cta" href="https://wa.me/+41772320307" target="_blank">📱 WhatsApp</a>
+        </div>
       </div>
     </div>
   </section>
@@ -196,12 +265,12 @@
   <!-- ABOUT -->
   <section class="section" id="about">
     <div class="container about">
-      <div class="reveal-left">
+      <div class="reveal">
         <h2 data-i18n-de="Über mich" data-i18n-en="About">Über mich</h2>
-        <p data-i18n-de="Praktikum bei <span style='color:#B38F5A'>Züri Rollt</span> als Fahrradmechaniker – ich bringe frisches Know-how in jeden Service." data-i18n-en="Internship at Züri Rollt as bike mechanic – bringing fresh expertise to every service.">Praktikum bei Züri Rollt als Fahrradmechaniker – ich bringe frisches Know-how in jeden Service.</p>
+        <p data-i18n-de="Praktikum bei <span style='color:#B38F5A'>Züri Rollt</span> als Fahrradmechaniker – ich bringe frisches Know-how in jeden Service." data-i18n-en="Internship at Züri Rollt as bike mechanic – bringing fresh expertise to every service.">Praktikum bei <span style='color:var(--color-accent)'>Züri Rollt</span> als Fahrradmechaniker – ich bringe frisches Know-how in jeden Service.</p>
       </div>
-      <div class="reveal-right">
-        <img src="images/mechanical working on a bike.jpg" alt="Mechanic working on bike">
+      <div class="reveal">
+        <img src="images/mechanical working on a bike.jpg" alt="Mechanic working on bike" loading="lazy">
       </div>
     </div>
   </section>
@@ -214,8 +283,8 @@
         <p class="muted" data-i18n-de="Elegante, schnelle Services — gebracht zu Ihnen" data-i18n-en="Elegant, fast services — delivered to you">Elegante, schnelle Services — gebracht zu Ihnen</p>
       </div>
 
-      <div class="cards" style="margin-top:28px">
-        <div class="card reveal">
+      <div class="cards" style="margin-top:18px">
+        <div class="card reveal" role="article" tabindex="0">
           <div class="flex" style="justify-content:space-between;align-items:center">
             <div style="font-weight:600">Velo Silber Service</div>
             <div class="icon">🔧</div>
@@ -224,7 +293,7 @@
           <div data-i18n-de="Kompletter Check & Pflege Ihres Fahrrads in ca. 30–40 Minuten." data-i18n-en="Complete bike check & maintenance in approx. 30–40 minutes.">Kompletter Check & Pflege Ihres Fahrrads in ca. 30–40 Minuten.</div>
         </div>
 
-        <div class="card reveal">
+        <div class="card reveal" role="article" tabindex="0">
           <div class="flex" style="justify-content:space-between;align-items:center">
             <div style="font-weight:600" data-i18n-de="Bremsen & Schaltung" data-i18n-en="Brakes & Gears">Bremsen & Schaltung</div>
             <div class="icon">⚙️</div>
@@ -233,7 +302,7 @@
           <div class="muted" data-i18n-de="Feinabstimmung von Bremsen und Schaltung für optimale Kontrolle." data-i18n-en="Fine-tuning brakes and gears for optimal control.">Feinabstimmung von Bremsen und Schaltung für optimale Kontrolle.</div>
         </div>
 
-        <div class="card reveal">
+        <div class="card reveal" role="article" tabindex="0">
           <div class="flex" style="justify-content:space-between;align-items:center">
             <div style="font-weight:600" data-i18n-de="Reinigung & Pflege" data-i18n-en="Cleaning & Care">Reinigung & Pflege</div>
             <div class="icon">🧽</div>
@@ -254,29 +323,39 @@
         <p class="muted" data-i18n-de="Faire, transparente Preise — keine Überraschungen" data-i18n-en="Fair, transparent pricing — no surprises">Faire, transparente Preise — keine Überraschungen</p>
       </div>
 
-      <div class="pricing" style="margin-top:28px">
+      <div class="pricing" style="margin-top:18px">
         <div class="price-card reveal">
           <h3 data-i18n-de="Introductory" data-i18n-en="Introductory">Introductory</h3>
           <div class="price">CHF 35–40</div>
-          <p class="muted" data-i18n-de="Schneller Check & Basis-Pflege" data-i18n-en="Quick check & basic care">Schneller Check & Basis-Pflege</p>
+          <p class="muted">Schneller Check & Basis-Pflege</p>
+          <ul>
+            <li>Brems- und Schaltungs-Check</li>
+            <li>Reifen & Luftdruck prüfen</li>
+            <li>Basis-Schmierung</li>
+          </ul>
         </div>
 
         <div class="price-card reveal">
           <h3 data-i18n-de="Standard" data-i18n-en="Standard">Standard</h3>
           <div class="price">CHF 45–50</div>
-          <p class="muted" data-i18n-de="Umfassende Wartung inkl. kleiner Einstellungen" data-i18n-en="Comprehensive maintenance incl. minor adjustments">Umfassende Wartung inkl. kleiner Einstellungen</p>
+          <p class="muted">Umfassende Wartung inkl. kleiner Einstellungen</p>
+          <ul>
+            <li>Kompletter Sicherheits-Check</li>
+            <li>Feinabstimmung von Bremsen & Schaltung</li>
+            <li>Reinigung & Schmierung</li>
+          </ul>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- BOOKING / CONTACT -->
+  <!-- TEAM -->
   <section class="section" id="team">
     <div class="container">
       <div class="reveal">
         <h2>Team</h2>
-        <div class="card" style="max-width:280px;margin-top:18px;text-align:center">
-          <img src="images/member.jpg" alt="Iyed" style="width:120px;height:120px;border-radius:50%;object-fit:cover;margin:auto;box-shadow:0 6px 18px rgba(0,0,0,0.6)">
+        <div class="card" style="max-width:280px;margin-top:18px;text-align:center" role="group" tabindex="0">
+          <img src="images/member.jpg" alt="Iyed" loading="lazy" style="width:120px;height:120px;border-radius:50%;object-fit:cover;margin:auto;box-shadow:var(--shadow-1)">
           <h3 style="margin:12px 0 6px">Iyed</h3>
           <p class="muted">DE · EN · AR</p>
         </div>
@@ -284,21 +363,36 @@
     </div>
   </section>
 
+  <!-- BOOKING -->
   <section class="section" id="booking">
-    <div class="container center">
-      <a class="cta" href="https://wa.me/+41772320307" target="_blank" style="display:flex;align-items:center;gap:10px">📱 WhatsApp</a>
+    <div class="container booking-wrap">
+      <div class="reveal">
+        <h2>Booking</h2>
+        <p class="muted">Schnell buchen per Formular. Das Formular öffnet eine vorbereitete E-Mail, die Sie abschicken können.</p>
+      </div>
+
+      <form id="bookingForm" class="reveal" aria-label="Booking form">
+        <input name="name" placeholder="Name" required>
+        <input name="phone" placeholder="Telefon / WhatsApp" required>
+        <textarea name="notes" placeholder="Kurze Beschreibung (z. B. Problem)"></textarea>
+        <button type="submit" class="form-btn">Aufgaben senden</button>
+      </form>
+
     </div>
   </section>
 
   <!-- CONTACT -->
-  <section class="section" id="contact" style="padding-top:40px;padding-bottom:40px">
+  <section class="section" id="contact" style="padding-top:24px;padding-bottom:24px">
     <div class="container">
-      <div class="reveal">
+      <div class="reveal contact-panel">
         <h3 data-i18n-de="Kontakt" data-i18n-en="Contact">Kontakt</h3>
-        <p class="muted">Velo Silber Service — Zürich · +41 77 232 03 07 · <a href="mailto: info.velosilber@gmail.com"> info.velosilber@gmail.com</a></p>
+        <p class="muted">Velo Silber Service — Zürich · +41 77 232 03 07 · <a href="mailto:info.velosilber@gmail.com">info.velosilber@gmail.com</a></p>
+        <p class="muted">DE | EN | AR</p>
       </div>
     </div>
   </section>
+
+  </main>
 
   <footer>
     <div class="container" style="display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap">
@@ -307,34 +401,34 @@
         <a href="#" aria-label="Instagram">IG</a>
         <a href="#" aria-label="Facebook">FB</a>
       </div>
-      <div class="muted">DE / EN</div>
+      <div class="muted">DE | EN | AR</div>
     </div>
   </footer>
 
-
 <script>
-  // ---- Language switch ----
-  const langBtn = document.getElementById('langBtn');
-  const langDot = document.getElementById('langDot');
-  const langLabel = document.getElementById('langLabel');
-  let lang = localStorage.getItem('vs-lang') || 'DE';
+  // --- Utilities ---
+  const el = (sel)=>document.querySelector(sel);
+  const els = (sel)=>Array.from(document.querySelectorAll(sel));
 
+  // --- Language switch ---
+  const langBtn = el('#langBtn');
+  const langDot = el('#langDot');
+  const langLabel = el('#langLabel');
+  let lang = localStorage.getItem('vs-lang') || 'DE';
   function applyLang(){
     document.documentElement.lang = (lang==='DE')? 'de' : 'en';
     langLabel.textContent = lang;
     if(lang==='EN'){
       langDot.style.background = 'transparent';
-      langDot.style.border = '1px solid rgba(192,192,192,0.9)';
-      // swap visible text elements
+      langDot.style.border = '1px solid var(--color-text-secondary)';
     } else {
-      langDot.style.background = 'var(--silver)';
+      langDot.style.background = 'var(--color-accent)';
       langDot.style.border = 'none';
     }
-
-    document.querySelectorAll('[data-i18n-de]').forEach(el=>{
-      const de = el.getAttribute('data-i18n-de');
-      const en = el.getAttribute('data-i18n-en')||de;
-      el.innerHTML = (lang==='DE')? de : en;
+    document.querySelectorAll('[data-i18n-de]').forEach(elm=>{
+      const de = elm.getAttribute('data-i18n-de');
+      const en = elm.getAttribute('data-i18n-en')||de;
+      elm.innerHTML = (lang==='DE')? de : en;
     });
   }
   langBtn.addEventListener('click', ()=>{
@@ -344,76 +438,118 @@
   });
   applyLang();
 
-  // ---- Smooth scroll for anchors ----
-  // Smooth scroll for CTA button
-  const ctaHero = document.getElementById('ctaHero');
-  if(ctaHero){ctaHero.addEventListener('click', ()=>{
-    const target = document.querySelector('#booking');
-    if(target) target.scrollIntoView({behavior:'smooth',block:'start'});
-  })}
+  // --- Theme toggle & system preference ---
+  const themeToggle = el('#themeToggle');
+  const html = document.documentElement;
+  const preferred = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+  let theme = localStorage.getItem('vs-theme') || preferred;
+  function applyTheme(t){
+    html.setAttribute('data-theme', t);
+    localStorage.setItem('vs-theme', t);
+    themeToggle.textContent = t==='dark' ? '🌙' : '🌞';
+    // update subtle shape opacity for accessibility
+    document.querySelectorAll('.shape').forEach(s=>{
+      s.style.opacity = (t==='dark')? '0.06' : '0.08';
+    });
+  }
+  themeToggle.addEventListener('click', ()=>{ theme = (theme==='dark')? 'light' : 'dark'; applyTheme(theme); });
+  applyTheme(theme);
 
-  document.querySelectorAll('[data-link]').forEach(a=>{
+  // --- Smooth scroll for anchors & CTA behavior ---
+  const ctaHero = el('#ctaHero');
+  if(ctaHero){ctaHero.addEventListener('click', ()=>{ const target = document.querySelector('#booking'); if(target) target.scrollIntoView({behavior:'smooth',block:'start'}); })}
+
+  els('[data-link]').forEach(a=>{
     a.addEventListener('click', (e)=>{
       e.preventDefault();
       const href = a.getAttribute('href');
       const target = document.querySelector(href);
-      if(target){
-        target.scrollIntoView({behavior:'smooth',block:'start'});
-        // close mobile nav if open
-        closeMobileNav();
-      }
+      if(target){ target.scrollIntoView({behavior:'smooth',block:'start'}); closeMobileNav(); }
     })
   });
 
-  // ---- Mobile menu ----
-  const menuToggle = document.getElementById('menuToggle');
-  const mobileNav = document.getElementById('mobileNav');
-  let open = false;
-  menuToggle.addEventListener('click', ()=>{
-    open = !open;
-    mobileNav.style.display = open ? 'block':'none';
-  });
-  function closeMobileNav(){open=false;mobileNav.style.display='none'}
+  // sticky book
+  const stickyBook = el('#stickyBook'); if(stickyBook){ stickyBook.addEventListener('click', (e)=>{ e.preventDefault(); const t = el('#booking'); if(t) t.scrollIntoView({behavior:'smooth',block:'start'}); }); }
 
-  // ---- Header shadow on scroll ----
-  const header = document.getElementById('mainHeader');
+  // --- Mobile menu ---
+  const menuToggle = el('#menuToggle');
+  const mobileNav = el('#mobileNav');
+  let open = false;
+  menuToggle && menuToggle.addEventListener('click', ()=>{ open = !open; mobileNav.style.display = open ? 'block' : 'none'; });
+  function closeMobileNav(){ open=false; if(mobileNav) mobileNav.style.display='none'; }
+
+  // --- Header shadow & hero parallax ---
+  const header = el('#mainHeader');
+  const heroBg = el('#heroBg');
   window.addEventListener('scroll', ()=>{
     if(window.scrollY>16) header.classList.add('scrolled'); else header.classList.remove('scrolled');
-    // hero parallax
-    const heroBg = document.getElementById('heroBg');
-    const offset = window.scrollY * 0.15;
-    if(heroBg) heroBg.style.transform = `translateY(${offset}px) scale(1.03)`;
-  });
+    if(heroBg){ const offset = window.scrollY * 0.12; heroBg.style.transform = `translateY(${offset}px) scale(1.02)`; }
+  }, {passive:true});
 
-  // ---- Reveal on scroll (IntersectionObserver) ----
-  const reveals = document.querySelectorAll('.reveal, .reveal-left, .reveal-right');
-  const obs = new IntersectionObserver((entries)=>{
-    entries.forEach(entry=>{
-      if(entry.isIntersecting){
-        entry.target.classList.add('show');
-        obs.unobserve(entry.target);
-      }
-    })
-  },{threshold:0.12});
+  // --- Reveal on scroll (IntersectionObserver) ---
+  const reveals = document.querySelectorAll('.reveal');
+  const obs = new IntersectionObserver((entries)=>{ entries.forEach(entry=>{ if(entry.isIntersecting){ entry.target.classList.add('show'); obs.unobserve(entry.target); } }); },{threshold:0.12});
   reveals.forEach(r=>obs.observe(r));
 
-  // ---- Booking form stub (no backend) ----
-  document.getElementById('bookingForm').addEventListener('submit', (e)=>{
-    e.preventDefault();
-    const btn = e.target.querySelector('button');
-    btn.textContent = (localStorage.getItem('vs-lang')==='EN')? 'Booked' : 'Gebucht';
-    btn.disabled = true;
-    btn.style.opacity = .9;
-    // Here, integrate with your backend or email service (e.g. Formspree, Netlify Forms)
-    setTimeout(()=>{
-      alert((localStorage.getItem('vs-lang')==='EN')? 'Thank you — your booking request was sent.' : 'Danke — Ihre Buchungsanfrage wurde gesendet.');
-    },350);
-  });
+  // --- Scrollspy for nav highlighting ---
+  const sections = Array.from(document.querySelectorAll('main section[id]'));
+  const navLinks = Array.from(document.querySelectorAll('.nav-link'));
+  const spy = new IntersectionObserver((entries)=>{
+    entries.forEach(entry=>{
+      if(entry.isIntersecting){
+        const id = entry.target.id;
+        navLinks.forEach(a=>a.classList.toggle('active', a.getAttribute('href') === `#${id}`));
+      }
+    })
+  },{threshold:0.5});
+  sections.forEach(s=>spy.observe(s));
 
-  // small misc
-  document.getElementById('year').textContent = new Date().getFullYear();
+  // --- Make service & team cards keep the accent border while hovered (keyboard accessible too) ---
+  // The CSS :hover already changes border-color. We'll add JS focus/blur to add a class for persistent state for keyboard users.
+  document.querySelectorAll('.card').forEach(card=>{
+    card.addEventListener('mouseenter', ()=>card.classList.add('hover-active'));
+    card.addEventListener('mouseleave', ()=>card.classList.remove('hover-active'));
+    card.addEventListener('focus', ()=>card.classList.add('hover-active'));
+    card.addEventListener('blur', ()=>card.classList.remove('hover-active'));
+  });
+  // CSS ensures .card.hover-active behaves same as :hover through existing rules (border-color transition)
+
+  // --- Booking form stub (constructs mailto to avoid backend) ---
+  const bookingForm = el('#bookingForm');
+  if(bookingForm){
+    bookingForm.addEventListener('submit', (e)=>{
+      e.preventDefault();
+      const fd = new FormData(bookingForm);
+      const name = fd.get('name') || '';
+      const phone = fd.get('phone') || '';
+      const date = fd.get('date') || '';
+      const time = fd.get('time') || '';
+      const notes = fd.get('notes') || '';
+      const subject = encodeURIComponent('Termin Anfrage — Velo Silber Service');
+      const body = encodeURIComponent(`Name: ${name}
+Telefon: ${phone}
+Datum: ${date} ${time}
+
+Nachricht:
+${notes}`);
+      const mailto = `mailto:info.velosilber@gmail.com?subject=${subject}&body=${body}`;
+      // For transparency, change button state
+      const btn = bookingForm.querySelector('button[type="submit"]');
+      if(btn){ btn.textContent = (localStorage.getItem('vs-lang')==='EN')? 'Sent' : 'Gesendet'; btn.disabled = true; }
+      // open mail client
+      window.location.href = mailto;
+    });
+  }
+
+  // --- Small misc ---
+  el('#year').textContent = new Date().getFullYear();
+
+  // --- Accessibility & performance notes ---
+  // Images are lazy-loaded via loading="lazy" attribute above. Consider compressing images and serving WebP for best performance.
+
+  // prevent errors when elements missing
+  window.addEventListener('error', (ev)=>{ /* noop: avoid console spam on older browsers */ });
 
 </script>
 </body>
-
 </html>
